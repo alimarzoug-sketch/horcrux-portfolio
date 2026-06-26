@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HORCRUX — Digital Art Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --gold: #c9a96e;
+      --gold-dim: rgba(201,169,110,0.4);
+      --gold-faint: rgba(201,169,110,0.12);
+      --cream: #f0e8d8;
+      --cream-dim: rgba(232,224,208,0.55);
+      --cream-muted: rgba(232,224,208,0.35);
+      --bg: #080810;
+      --bg-card: #0d0d1a;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: #e8e0d0;
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    /* ── LANG TOGGLE ── */
+    .lang-en .ar { display: none !important; }
+    .lang-ar .en { display: none !important; }
+    .lang-ar { direction: rtl; }
+    .lang-ar .hx-nav-links { flex-direction: row-reverse; }
+    .lang-ar .hx-footer { flex-direction: row-reverse; }
+    .lang-ar .hx-card-overlay { text-align: right; }
+
+    /* ── NAV ── */
+    .hx-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 3rem;
+      border-bottom: 0.5px solid var(--gold-faint);
+      position: sticky;
+      top: 0;
+      background: rgba(8,8,16,0.94);
+      backdrop-filter: blur(10px);
+      z-index: 100;
+    }
+
+    .hx-logo {
+      font-family: 'Cinzel', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      color: var(--gold);
+    }
+
+    .hx-nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .hx-nav-links a {
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--cream-dim);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .hx-nav-links a:hover { color: var(--gold); }
+
+    .hx-lang-btn {
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      background: none;
+      border: 0.5px solid var(--gold-dim);
+      color: var(--gold);
+      padding: 0.35rem 0.9rem;
+      cursor: pointer;
+      transition: background 0.3s;
+      border-radius: 2px;
+    }
+    .hx-lang-btn:hover { background: var(--gold-faint); }
+
+    /* ── HERO ── */
+    .hx-hero {
+      min-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      padding: 4rem 2rem;
+      overflow: hidden;
+    }
+
+    .hx-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 65% 55% at 50% 65%, rgba(80,20,130,0.2) 0%, transparent 70%),
+        radial-gradient(ellipse 35% 25% at 18% 25%, rgba(201,169,110,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 30% 20% at 82% 75%, rgba(201,169,110,0.04) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .hx-eyebrow {
+      font-size: 0.68rem;
+      letter-spacing: 0.38em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.6rem;
+      opacity: 0.8;
+    }
+
+    .hx-hero-title {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(4rem, 12vw, 8rem);
+      font-weight: 900;
+      line-height: 0.92;
+      letter-spacing: 0.06em;
+      color: var(--cream);
+      text-shadow: 0 0 100px rgba(201,169,110,0.12);
+      margin-bottom: 1.8rem;
+    }
+
+    .hx-hero-sub {
+      font-size: 0.88rem;
+      font-weight: 300;
+      color: var(--cream-muted);
+      letter-spacing: 0.07em;
+      max-width: 340px;
+      line-height: 2;
+      margin-bottom: 3.5rem;
+    }
+
+    .hx-scroll-hint {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+      color: rgba(201,169,110,0.35);
+      font-size: 0.62rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+
+    .hx-scroll-line {
+      width: 0.5px;
+      height: 44px;
+      background: linear-gradient(to bottom, rgba(201,169,110,0.4), transparent);
+      animation: scroll-pulse 2.2s ease-in-out infinite;
+    }
+
+    @keyframes scroll-pulse {
+      0%, 100% { opacity: 0.35; transform: scaleY(1); }
+      50% { opacity: 0.9; transform: scaleY(1.12); }
+    }
+
+    /* ── GALLERY ── */
+    .hx-gallery {
+      padding: 6rem 3rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .hx-section-label {
+      font-size: 0.63rem;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.7rem;
+      opacity: 0.7;
+    }
+
+    .hx-section-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.7rem;
+      font-weight: 400;
+      color: var(--cream);
+      margin-bottom: 3.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 0.5px solid var(--gold-faint);
+    }
+
+    .hx-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: rgba(201,169,110,0.07);
+    }
+
+    .hx-card {
+      position: relative;
+      aspect-ratio: 4/5;
+      background: var(--bg-card);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.45s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+
+    .hx-card:hover { transform: scale(0.975); }
+    .hx-card:hover .hx-card-overlay { opacity: 1; }
+    .hx-card:hover .hx-card-bg { filter: brightness(0.55) saturate(0.65); }
+
+    .hx-card-bg {
+      position: absolute;
+      inset: 0;
+      transition: filter 0.45s ease;
+    }
+
+    .hx-card-overlay {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.45s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.8rem;
+      background: linear-gradient(to top, rgba(8,8,16,0.92) 0%, rgba(8,8,16,0.2) 50%, transparent 100%);
+    }
+
+    .hx-card-num {
+      font-family: 'Cinzel', serif;
+      font-size: 0.58rem;
+      letter-spacing: 0.22em;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+
+    .hx-card-name {
+      font-family: 'Cinzel', serif;
+      font-size: 1.05rem;
+      font-weight: 400;
+      color: var(--cream);
+      margin-bottom: 0.3rem;
+    }
+
+    .hx-card-tag {
+      font-size: 0.68rem;
+      color: var(--cream-muted);
+      letter-spacing: 0.1em;
+    }
+
+    /* placeholder gradients */
+    .art-1 { background: radial-gradient(ellipse at 40% 30%, #2d1060 0%, #050012 70%); }
+    .art-2 { background: radial-gradient(ellipse at 65% 55%, #601015 0%, #0a0005 70%); }
+    .art-3 { background: radial-gradient(ellipse at 30% 70%, #0e3d2a 0%, #000a05 70%); }
+    .art-4 { background: radial-gradient(ellipse at 60% 35%, #3d1e08 0%, #0a0400 70%); }
+    .art-5 { background: radial-gradient(ellipse at 50% 50%, #10105e 0%, #000010 70%); }
+    .art-6 { background: radial-gradient(ellipse at 35% 65%, #4a0f2c 0%, #080005 70%); }
+
+    /* ── ABOUT ── */
+    .hx-about {
+      padding: 6rem 3rem;
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .hx-divider {
+      width: 40px;
+      height: 0.5px;
+      background: var(--gold-dim);
+      margin: 0 auto 2.5rem;
+    }
+
+    .hx-about-text {
+      font-size: 1rem;
+      line-height: 2.1;
+      color: rgba(232,224,208,0.5);
+      font-weight: 300;
+    }
+
+    /* ── CONTACT ── */
+    .hx-contact {
+      padding: 5rem 3rem;
+      text-align: center;
+      border-top: 0.5px solid var(--gold-faint);
+    }
+
+    .hx-contact-title {
+      font-family: 'Cinzel', serif;
+      font-size: 2.2rem;
+      font-weight: 400;
+      color: var(--cream);
+      margin-bottom: 2.5rem;
+    }
+
+    .hx-social-links {
+      display: flex;
+      justify-content: center;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+    }
+
+    .hx-social-link {
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--cream-muted);
+      text-decoration: none;
+      border-bottom: 0.5px solid rgba(201,169,110,0.18);
+      padding-bottom: 0.2rem;
+      transition: all 0.3s;
+    }
+    .hx-social-link:hover { color: var(--gold); border-bottom-color: var(--gold); }
+
+    /* ── FOOTER ── */
+    .hx-footer {
+      padding: 2rem 3rem;
+      border-top: 0.5px solid rgba(201,169,110,0.07);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.68rem;
+      color: rgba(232,224,208,0.18);
+      letter-spacing: 0.1em;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .hx-nav { padding: 1.2rem 1.5rem; }
+      .hx-nav-links { gap: 1.2rem; }
+      .hx-gallery { padding: 4rem 1.5rem; }
+      .hx-grid { grid-template-columns: repeat(2, 1fr); }
+      .hx-about { padding: 4rem 1.5rem; }
+      .hx-contact { padding: 4rem 1.5rem; }
+      .hx-footer { padding: 1.5rem; flex-direction: column; gap: 0.5rem; text-align: center; }
+    }
+
+    @media (max-width: 480px) {
+      .hx-grid { grid-template-columns: 1fr; }
+      .hx-nav-links { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hx-scroll-line { animation: none; }
+      .hx-card, .hx-card-bg, .hx-card-overlay { transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="lang-en" id="hxRoot">
+
+  <!-- NAV -->
+  <nav class="hx-nav">
+    <div class="hx-logo">HORCRUX</div>
+    <ul class="hx-nav-links">
+      <li><a href="#gallery" class="en">Gallery</a><a href="#gallery" class="ar">المعرض</a></li>
+      <li><a href="#about" class="en">About</a><a href="#about" class="ar">عن الفنان</a></li>
+      <li><a href="#contact" class="en">Contact</a><a href="#contact" class="ar">تواصل</a></li>
+    </ul>
+    <button class="hx-lang-btn" onclick="toggleLang()" id="langBtn">عربي</button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hx-hero">
+    <p class="hx-eyebrow en">Digital Art Portfolio</p>
+    <p class="hx-eyebrow ar">معرض الفن الرقمي</p>
+    <h1 class="hx-hero-title">HORCRUX</h1>
+    <p class="hx-hero-sub en">Art that lives in the dark — fragments of the soul, rendered in light.</p>
+    <p class="hx-hero-sub ar">فن يسكن الظلام — شظايا الروح، مرسومة بالضوء.</p>
+    <div class="hx-scroll-hint">
+      <span class="en">Scroll</span>
+      <span class="ar">تمرير</span>
+      <div class="hx-scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="hx-gallery" id="gallery">
+    <p class="hx-section-label en">Selected Works</p>
+    <p class="hx-section-label ar">أعمال مختارة</p>
+    <h2 class="hx-section-title en">The Collection</h2>
+    <h2 class="hx-section-title ar">المجموعة</h2>
+
+    <div class="hx-grid">
+      <div class="hx-card">
+        <div class="hx-card-bg art-1"></div>
+        <div class="hx-card-overlay">
+          <p class="hx-card-num">01</p>
+          <p class="hx-card-name en">Void Keeper</p>
+          <p class="hx-card-name ar">حارس الفراغ</p>
+          <p class="hx-card-tag en">Digital · 2024</p>
+          <p class="hx-card-tag ar">رقمي · 2024</p>
+        </div>
+      </div>
+      <div class="hx-card">
+        <div class="hx-card-bg art-2"></div>
+        <div class="hx-card-overlay">
+          <p class="hx-card-num">02</p>
+          <p class="hx-card-name en">Crimson Fragment</p>
+          <p class="hx-card-name ar">شظية القرمزي</p>
+          <p class="hx-card-tag en">Digital · 2024</p>
+          <p class="hx-card-tag ar">رقمي · 2024</p>
+        </div>
+      </div>
+      <div class="hx-card">
+        <div class="hx-card-bg art-3"></div>
+        <div class="hx-card-overlay">
+          <p class="hx-card-num">03</p>
+          <p class="hx-card-name en">The Still Forest</p>
+          <p class="hx-card-name ar">الغابة الصامتة</p>
+          <p class="hx-card-tag en">Digital · 2025</p>
+          <p class="hx-card-tag ar">رقمي · 2025</p>
+        </div>
+      </div>
+      <div class="hx-card">
+        <div class="hx-card-bg art-4"></div>
+        <div class="hx-card-overlay">
+          <p class="hx-card-num">04</p>
+          <p class="hx-card-name en">Ember Memory</p>
+          <p class="hx-card-name ar">ذاكرة الجمر</p>
+          <p class="hx-card-tag en">Digital · 2025</p>
+          <p class="hx-card-tag ar">رقمي · 2025</p>
+        </div>
+      </div>
+      <div class="hx-card">
+        <div class="hx-card-bg art-5"></div>
+        <div class="hx-card-overlay">
+          <p class="hx-card-num">05</p>
+          <p class="hx-card-name en">Midnight Signal</p>
+          <p class="hx-card-name ar">إشارة منتصف الليل</p>
+          <p class="hx-card-tag en">Digital · 2025</p>
+          <p class="hx-card-tag ar">رقمي · 2025</p>
+        </div>
+      </div>
+      <div class="hx-card">
+        <div class="hx-card-bg art-6"></div>
+        <div class="hx-card-overlay">
+          <p class="hx-card-num">06</p>
+          <p class="hx-card-name en">Soul Shard</p>
+          <p class="hx-card-name ar">شظية الروح</p>
+          <p class="hx-card-tag en">Digital · 2026</p>
+          <p class="hx-card-tag ar">رقمي · 2026</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="hx-about" id="about">
+    <p class="hx-section-label en">The Artist</p>
+    <p class="hx-section-label ar">الفنان</p>
+    <div class="hx-divider"></div>
+    <p class="hx-about-text en">
+      I create digital art that explores the boundary between darkness and light — where forgotten emotions become visible forms. Each piece is a fragment, a horcrux of a feeling that refuses to disappear.
+    </p>
+    <p class="hx-about-text ar">
+      أصنع فناً رقمياً يستكشف الحدود بين الظلام والضوء — حيث تتحول المشاعر المنسية إلى أشكال مرئية. كل لوحة شظية، هوركروكس لإحساس يرفض الاختفاء.
+    </p>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="hx-contact" id="contact">
+    <h2 class="hx-contact-title en">Get in Touch</h2>
+    <h2 class="hx-contact-title ar">تواصل معي</h2>
+    <div class="hx-social-links">
+      <a href="#" class="hx-social-link">Instagram</a>
+      <a href="#" class="hx-social-link">Behance</a>
+      <a href="#" class="hx-social-link">ArtStation</a>
+      <a href="#" class="hx-social-link en">Email</a>
+      <a href="#" class="hx-social-link ar">البريد الإلكتروني</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="hx-footer">
+    <span>HORCRUX © 2026</span>
+    <span class="en">All works reserved</span>
+    <span class="ar">جميع الحقوق محفوظة</span>
+  </footer>
+
+</div>
+
+<script>
+  function toggleLang() {
+    const root = document.getElementById('hxRoot');
+    const btn = document.getElementById('langBtn');
+    const isEn = root.classList.contains('lang-en');
+    root.classList.replace(isEn ? 'lang-en' : 'lang-ar', isEn ? 'lang-ar' : 'lang-en');
+    document.documentElement.lang = isEn ? 'ar' : 'en';
+    btn.textContent = isEn ? 'English' : 'عربي';
+  }
+</script>
+
+</body>
+</html>
